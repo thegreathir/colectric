@@ -1,0 +1,6 @@
+width: 1000
+height: 1000
+lines_count: 18
+start_radius: 5
+max_iterations: 50000
+force_factor: 120
