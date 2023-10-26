@@ -1,3 +1,5 @@
+use std::time::Instant;
+
 use config::get_config;
 use physics::{Charge, Sheet, Vector};
 use raqote::{DrawOptions, DrawTarget, PathBuilder, SolidSource};
@@ -10,11 +12,15 @@ fn main() {
         charges: vec![
             Charge {
                 ch: 10.0,
-                pos: Vector::new(200.0, 700.0),
+                pos: Vector::new(200., 700.),
             },
             Charge {
                 ch: 50.0,
-                pos: Vector::new(600.0, 250.0),
+                pos: Vector::new(600., 250.),
+            },
+            Charge {
+                ch: 15.0,
+                pos: Vector::new(900., 100.),
             },
         ],
     };
@@ -47,7 +53,14 @@ fn main() {
 
     let mut pb = PathBuilder::new();
 
-    sheet.get_lines().iter().for_each(|line| {
+    {
+        let start = Instant::now();
+        let lines = sheet.get_lines();
+        println!("Generated lines in {:?}", start.elapsed());
+        lines
+    }
+    .iter()
+    .for_each(|line| {
         let mut first = true;
         for p in line {
             if first {
