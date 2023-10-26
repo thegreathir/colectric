@@ -1,6 +1,6 @@
-use std::{sync::OnceLock, fs::File};
+use std::{fs::File, sync::OnceLock};
 
-use serde::{Serialize, Deserialize};
+use serde::{Deserialize, Serialize};
 
 #[derive(Serialize, Deserialize)]
 pub struct Config {
