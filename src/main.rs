@@ -56,7 +56,11 @@ fn main() {
     {
         let start = Instant::now();
         let lines = sheet.get_lines();
-        println!("Generated lines in {:?}", start.elapsed());
+        println!(
+            "Generated {} points in {:?}",
+            lines.iter().map(|v| { v.len() }).sum::<usize>(),
+            start.elapsed()
+        );
         lines
     }
     .iter()
