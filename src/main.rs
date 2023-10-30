@@ -54,7 +54,7 @@ fn main() {
 
     let mut pb = PathBuilder::new();
 
-    {
+    let points_count = {
         let start = Instant::now();
         let lines = sheet.get_lines();
         let elapsed = start.elapsed();
@@ -62,14 +62,14 @@ fn main() {
             "Generated {} points in {:?}",
             lines.iter().map(|v| { v.points().len() }).sum::<usize>(),
             elapsed
-            
         );
         lines
     }
-    .iter()
-    .for_each(|line| {
+    .into_iter()
+    .map(|line| line.simplify(&1.0))
+    .map(|line| {
         let mut first = true;
-        for p in line {
+        for p in &line {
             if first {
                 pb.move_to(p.x, p.y);
                 first = false;
@@ -77,7 +77,11 @@ fn main() {
             }
             pb.line_to(p.x, p.y);
         }
-    });
+        line
+    })
+    .map(|v| v.points().len())
+    .sum::<usize>();
+    print!("Reduced to {} points", points_count);
 
     let path = pb.finish();
     dt.stroke(
