@@ -1,6 +1,7 @@
 use std::time::Instant;
 
 use config::get_config;
+use geo::Simplify;
 use physics::{Charge, Sheet, Vector};
 use raqote::{DrawOptions, DrawTarget, PathBuilder, SolidSource};
 
@@ -19,8 +20,8 @@ fn main() {
                 pos: Vector::new(600., 250.),
             },
             Charge {
-                ch: 15.0,
-                pos: Vector::new(900., 100.),
+                ch: 2.0,
+                pos: Vector::new(900., 900.),
             },
         ],
     };
@@ -56,10 +57,12 @@ fn main() {
     {
         let start = Instant::now();
         let lines = sheet.get_lines();
+        let elapsed = start.elapsed();
         println!(
             "Generated {} points in {:?}",
-            lines.iter().map(|v| { v.len() }).sum::<usize>(),
-            start.elapsed()
+            lines.iter().map(|v| { v.points().len() }).sum::<usize>(),
+            elapsed
+            
         );
         lines
     }

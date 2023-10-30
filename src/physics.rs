@@ -1,4 +1,5 @@
 use euclid::{Angle, Box2D, Rotation2D, UnknownUnit};
+use geo::{coord, LineString};
 
 use crate::config::get_config;
 pub type Vector = euclid::Vector2D<f32, UnknownUnit>;
@@ -21,7 +22,7 @@ pub struct Sheet {
 }
 
 impl Sheet {
-    pub fn get_lines(&self) -> Vec<Vec<Vector>> {
+    pub fn get_lines(&self) -> Vec<LineString<f32>> {
         self.charges
             .iter()
             .flat_map(|ch| {
@@ -41,7 +42,7 @@ impl Sheet {
             .collect()
     }
 
-    fn get_line(&self, start: Vector) -> Vec<Vector> {
+    fn get_line(&self, start: Vector) -> LineString<f32> {
         let mut lines = vec![];
 
         let mut q = Charge { ch: 1., pos: start };
@@ -52,7 +53,7 @@ impl Sheet {
         );
 
         for _ in 0..get_config().max_iterations {
-            lines.push(q.pos);
+            lines.push(coord! {x: q.pos.x, y: q.pos.y});
             let force = self
                 .charges
                 .iter()
@@ -65,6 +66,6 @@ impl Sheet {
             }
         }
 
-        lines
+        lines.into()
     }
 }
